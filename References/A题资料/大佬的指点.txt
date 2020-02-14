@@ -1,0 +1,63 @@
+小跟班 7:23:32
+A近似可考虑为连续类的问题
+
+剑心通明 7:23:57
+A题数据需要自己去找么
+
+小跟班 7:24:11
+数据需要自己找
+
+小跟班 7:24:23
+A题主要是怎么找影响指标
+
+小跟班 7:24:35
+影响指标对水温是怎么影响的
+
+小跟班 7:24:49
+找到关系建立模型进行预测
+
+小跟班 7:27:24
+A题的难点就是选择的指标建立得连续性模型能够很好的反应实际情况
+
+AE需要自己找到数据去验证自己建立模型的合理性
+
+芝诺的乌龟 8:04:52
+http://worldweather.wmo.int/en/city.html?cityId=730
+
+芝诺的乌龟 8:05:08
+缅因州平均气候数据
+
+1.A题：
+缅因州平均气候数据http://worldweather.wmo.int/en/city.html?cityId=730
+气候数据：https://blog.csdn.net/u010499272/article/details/88680070
+
+下载文献的，http://www.sci-hub.ren/，很多外文文献下载不下来，没有数据库，用这个，只要查到文献的DOI号
+
+苏格兰渔业统计数据：https://www.gov.scot/publications/scottish-sea-fisheries-statistics-2016-9781788512169/pages/3/
+
+秋冬东北大西洋鲭鱼( Scomber scombrus)的迁徙和渔业
+Teunis詹森，1，* 安德鲁坎贝尔， 2夏兰凯利，2亚尔马Hatun.3和马克R.佩恩1，4
+
+A题：
+是一个连续性的预测问题 ，数据很重要但是确定影响指标也很重要，数据可能需要：鱼类过去和现阶段的环境因素、渔业公司的经营状况等
+第一问：首先建立模型求出温度变化是怎样影响鱼类迁徙，影响水温bi安华的又有一系列指标，建立指标与温度变化关系，实际是通过系列指标对温度进行预测，可采用回归、时间序列、灰色预测数据量较小不建议用神经网络，得到鱼群随着时间变化，鱼群的地理位置分布信息
+
+第二问：根据海水温度变化发生的速度，使用您的模型预测最佳情况，最坏情况以及最可能经过的时间，直到小型渔业公司继续捕捞这些种群将使小型渔业公司无法收获为止在其当前位置之外进行操作。
+
+第二问需要应用第一问建立得模型，根据海洋温度变化的速度来求小渔业公司捕捞可以持续的时间长短，最优就是持续时间最长，最劣就是持续时间很短，以及根据现在发展状况，这个时间最可能是多久，简单一点的话就是最差情况当所有鱼都迁徙了，渔业公司倒闭；复杂一点考虑做的话就是考虑经济型的经营成本，根据鱼的数量及公司的数量，捕捞强度等进行预测求解，建议按照复杂方式去做，下面问题好考虑
+
+第三问，美赛一般都是需要改变经营方式的。题中给了三个选项，第一个是迁徙公司，第二个是不迁徙，第三个是自己想。如果采用方式1.鱼迁徙公司迁徙那么公司在不同地方公司经营成本不同。第二种方式就是公司不迁徙，派出小船，求经营成本，总言之通过说明使得公司不至于倒闭
+
+第四问，第四个问题接着第三个问题方案1，如果公司迁移了，归收到其他国家政策等的影响，会导致一些列问题，会盈利还是亏损需要考虑
+
+第五问，美赛常见问题，根据与预测结果写个建议，一般都说通过我们的方法，可以使得渔民公司盈利等等
+
+A题气候数据：https://climatedataguide.ucar.edu/climate-data/global-surface-temperature-data-mlost-noaa-merged-land-ocean-surface-temperature
+
+A题经济数据：https://www.gov.scot/publications/scottish-sea-fisheries-statistics-2016-9781788512169/pages/3/
+
+A题海洋温度数据还可从下面访问下载：http://omap.africanmarineatlas.org/BIOSPHERE/data/biol_oceano/phytoplankton/chlorophyll/nasa_Aqua_MODIS_4km_L3/docs/OceanColorHomePage.htm
+
+https://climatedataguide.ucar.edu/climate-data/global-surface-temperature-data-gistemp-nasa-goddard-institute-space-studies-giss
+
+NOAA网站
