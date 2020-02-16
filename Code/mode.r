@@ -115,6 +115,7 @@ for(i in lomin:lomax)
         temp_map[i,j,] = temp_temp
     }
 }
+save(temp_map,file = "modeData.Rdata")
 
 #粒子群模拟鱼的迁徙
 
@@ -131,20 +132,22 @@ for(i in lomin:lomax)
 #初始化粒子群
 #定义各参数
 fnum = 200 #鱼的个数
-vmax = 0.5 #每3天移动一个经纬度
+vmax = 0.35 #每3天移动一个经纬度
 pbeast = NULL #历史经过的最合适位置
 gbeast = NULL #种群经过的最合适位置
-w = 1 #设置惯性权重，通常取非负数，用于调节解空间的搜索范围，w = 1 时，算法为基本粒子群算法。w = 0 时，失去粒子对自身速度的记忆。
-c1 = c2 =2 #设置加速度常数
+w = 0.6 #设置惯性权重，通常取非负数，用于调节解空间的搜索范围，w = 1 时，算法为基本粒子群算法。w = 0 时，失去粒子对自身速度的记忆。
+c1 = 2.8 #设置个人加速度常数
+c2 = 1.3 #设置社会加速度常数
 iters = 6000 #设置最大迭代次数
 t0 = 9 #鱼类的理想温度
-a = 3000 #温度敏感函数系数
+a = 300 #温度敏感函数系数
 b = 0 #温度敏感函数
+c = 2
 
 #定义代价函数
 #影响因素：当前坐标的温度t1，a、b为常数因子
 #未来还可以增加更多的影响因素(比如捕食者、食物季节等)，影响因素必须是x和y的函数
-#f(x,y) = a/|t1(x,y)-t0| + b
+#f(x,y) = a/|t1(x,y)-t0|^c + b
 #求当前函数的最大值
 
 #--在给定定义域内，随机生成位置矩阵如下，
@@ -153,6 +156,7 @@ xMat = matrix(c(x=runif(fnum,lomin_0,lomax_0),y=runif(fnum,lamin_0,lamax_0)),byr
 #打印之前粒子位置
 cat("before\n")
 print(xMat)
+plot(xMat,xlim = c(170,180),ylim = c(13,17))
 #--在给定的最大速度限制的条件下，随机生成速度矩阵
 set.seed(1)
 vMat = matrix(c(x=runif(fnum,-vmax,vmax),y=runif(fnum,-vmax,vmax)),byrow = F,ncol = 2,dimnames = list(NULL,c("x","y")))
@@ -163,10 +167,11 @@ vMat = matrix(c(x=runif(fnum,-vmax,vmax),y=runif(fnum,-vmax,vmax)),byrow = F,nco
 #同时更新所有粒子的位置与速度
 #pbest记录每个粒子历史的适应度最高位置
 #gbest记录种群历史适应度的最高位置
-adjusts<-apply(xMat,1,function(v){a/abs(temp_map[ceiling(v[1]),ceiling(v[2]),1] - t0) + b})
+adjusts<-apply(xMat,1,function(v){a/abs(temp_map[ceiling(v[1]),ceiling(v[2]),1] - t0)^c + b})
 pbest = xMat
 pbest = cbind(pbest,adjusts)
 gbest = pbest[which.max(pbest[,3]),]
+cnt <- 0
 for(k in 1:iters)
 {
     #迭代6000次，模拟度过50年(600个月)，相当于每三天更新一次坐标
@@ -213,10 +218,19 @@ for(k in 1:iters)
     vMat[vMat<(-vmax)]<-(-vmax)
     vMat[vMat>vmax]<-vmax
     #计算更新后种群中所有粒子的代价函数
-    adjusts<-apply(xMat,1,function(v){a/abs(temp_map[ceiling(v[1]),ceiling(v[2]),time_now] - t0) + b})
+    adjusts<-apply(xMat,1,function(v){a/abs(temp_map[ceiling(v[1]),ceiling(v[2]),time_now] - t0)^c + b})
+
+    #计数输出散点图
+    cnt <- cnt + 1
+    if(cnt == 10)
+    {
+        plot(xMat,xlim = c(170,180),ylim = c(13,17))
+        cnt  <- 0
+
+    }
 }
 
 #输出最后的例子位置
 cat("after\n")
 print(xMat)
-plot(xMat)
+plot(xMat,xlim = c(170,180),ylim = c(13,17))
