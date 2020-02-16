@@ -1,0 +1,51 @@
+$Granger
+
+        Granger causality H0: AtmosphericCO2Concentrations do not Granger-cause SeaSurfaceTemperature AtmosphericN2OConcentrations
+
+data:  VAR object mode
+F-Test = 3.873, df1 = 30, df2 = 309, p-value = 6.328e-10
+
+
+$Instant
+
+        H0: No instantaneous causality between: AtmosphericCO2Concentrations and SeaSurfaceTemperature AtmosphericN2OConcentrations
+
+data:  VAR object mode
+Chi-squared = 1.1586, df = 2, p-value = 0.5603
+
+----------------------------------
+
+$Granger
+
+        Granger causality H0: AtmosphericN2OConcentrations do not Granger-cause SeaSurfaceTemperature AtmosphericCO2Concentrations
+
+data:  VAR object mode
+F-Test = 1.5618, df1 = 30, df2 = 309, p-value = 0.03421
+
+
+$Instant
+
+        H0: No instantaneous causality between: AtmosphericN2OConcentrations and SeaSurfaceTemperature AtmosphericCO2Concentrations
+
+data:  VAR object mode
+Chi-squared = 0.83175, df = 2, p-value = 0.6598
+
+----------------------------------------
+$Granger
+
+        Granger causality H0: SeaSurfaceTemperature do not Granger-cause AtmosphericCO2Concentrations AtmosphericN2OConcentrations
+
+data:  VAR object mode
+F-Test = 0.72719, df1 = 30, df2 = 309, p-value = 0.8533
+
+
+$Instant
+
+        H0: No instantaneous causality between: SeaSurfaceTemperature and AtmosphericCO2Concentrations AtmosphericN2OConcentrations
+
+data:  VAR object mode
+Chi-squared = 0.59618, df = 2, p-value = 0.7422
+----------------------------------
+说明N2O和CO2浓度都显著影响了海水表面温度，模型是合理的（p值显著小于0.05，在95%的置信水平下，认为有因果关系，
+CO2的影响最明显数量级在十的负十次方。可以用温室气体的排放预测海水温度）此外，三者之间不存在瞬时因果关系，
+影响是逐渐而缓慢的，符合我们的认知
