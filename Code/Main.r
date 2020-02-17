@@ -1,6 +1,11 @@
 
 #主函数入口
 library(geosphere)
+library(ggplot2)
+library(ggmap)
+library(sp)
+library(maptools)
+library(maps)
 #参数限定
 #经纬度边界
 lomin <- 150
@@ -19,21 +24,41 @@ futm = 600
 # 2为RCP36
 # 3为RCP45
 # 4为RCP85
-index <- 2
+index <- 1
 #渔场的经纬坐标
 yuchang <- c(358,57.6934)
 #极限距离(米)
 mostdis <- 392600
 #溢出百分比
-percent <- 0.80
+percent <- 0.68
 
-#定义数组指标转换函数
+#定义数组指标转换函数和画图函数
 ind2lola <- function(x)
 {
     y <- c(1,2)
     y[1] <- (358*x[1] - 358)/179
     y[2] <- (-88*2*x[2] + 88*90)/88
     y
+}
+
+ind2lola_2 <- function(x)
+{
+    x[,1] <- (358*x[,1] - 358)/179 - 360
+    x[,2] <- (-88*2*x[,2] + 88*90)/88
+    x
+}
+
+Make_pictuer <- function(xMat)
+{
+    xMat <- ind2lola_2(xMat)
+    mp<-NULL #定义一个空的地图
+    mapworld<-borders("world",colour = "gray50",fill="white") #绘制基本地图
+    mp<-ggplot()+mapworld+ylim(50,70)+xlim(-55,1.75)
+    mydata <- data.frame(x = xMat[,1],y = xMat[,2])
+    mp2<-mp+geom_point(aes(x=mydata$x,y=mydata$y),color="darkorange")+scale_size(range=c(1,1))
+    print(mp2)
+    #绘制带点的地图，geom_point是在地图上绘制点，x轴为经度信息，y轴为纬度信息，size是将点的大小按照收集的个数确定，color为暗桔色，scale_size是将点变大一些
+
 }
 
 #获取温度数据
@@ -78,9 +103,9 @@ c = 2
 set.seed(1)
 xMat = matrix(c(x=runif(fnum,lomin_0,lomax_0),y=runif(fnum,lamin_0,lamax_0)),byrow = F,ncol = 2,dimnames = list(NULL,c("x","y")))
 #打印之前粒子位置
-cat("before\n")
-print(xMat)
-plot(xMat,xlim = c(170,180),ylim = c(13,17))
+# cat("before\n")
+# print(xMat)
+# plot(xMat,xlim = c(170,180),ylim = c(13,17))
 #--在给定的最大速度限制的条件下，随机生成速度矩阵
 set.seed(1)
 vMat = matrix(c(x=runif(fnum,-vmax,vmax),y=runif(fnum,-vmax,vmax)),byrow = F,ncol = 2,dimnames = list(NULL,c("x","y")))
@@ -96,6 +121,7 @@ pbest = xMat
 pbest = cbind(pbest,adjusts)
 gbest = pbest[which.max(pbest[,3]),]
 cnt <- 0
+Make_pictuer(xMat)
 for(k in 1:iters)
 {
     #迭代6000次，模拟度过50年(600个月)，相当于每三天更新一次坐标
@@ -144,10 +170,12 @@ for(k in 1:iters)
     #计算更新后种群中所有粒子的代价函数
     adjusts<-apply(xMat,1,function(v){a/abs(temp_map[ceiling(v[1]),ceiling(v[2]),time_now] - t0)^c + b})
     #计数输出散点图
+
     cnt <- cnt + 1
-    if(cnt == 10)
+    if(time_now == 600)
     {
-        plot(xMat,xlim = c(170,180),ylim = c(13,17))
+        break
+        Make_pictuer(xMat)
         cnt  <- 0
     }
     # cnt. <- 0
@@ -170,6 +198,7 @@ for(k in 1:iters)
 }
 
 #输出最后的粒子位置
-cat("after\n")
-print(xMat)
-plot(xMat,xlim = c(170,180),ylim = c(13,17))
+Make_pictuer(xMat)
+# cat("after\n")
+# print(xMat)
+# plot(xMat,xlim = c(170,180),ylim = c(13,17))
